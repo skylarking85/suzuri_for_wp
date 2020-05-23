@@ -1,0 +1,25 @@
+.widget_suzuriforwpwidget ul {
+	margin: 0;
+	padding: 0;
+}
+.widget_suzuriforwpwidget li {
+	list-style: none;
+}
+.widget_suzuriforwpwidget h4 {
+	font-size: 16px;
+	line-height: 1.25em;
+}
+.widget_suzuriforwpwidget a {
+	color: #333;
+	text-decoration: none;
+}
+.widget_suzuriforwpwidget a:hover {
+	color: #333;
+	background-color: rgba(84,153,175,.05);
+}
+.widget_suzuriforwpwidget img {
+	width: 200px;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+}
