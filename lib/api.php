@@ -54,7 +54,7 @@ class SuzuriForWpApi {
   }
 
   public function get_products($option) {
-  	$endpoint = self::SUZURI_API_URL . 'products/'; //?userId=1856
+  	$endpoint = self::SUZURI_API_URL . 'products/';
 
   	$params = array(
     	"userName" => $this->userName
@@ -79,9 +79,9 @@ class SuzuriForWpApi {
   private function get_proc($request_url, $context) {
     $curl = curl_init();
     curl_setopt( $curl, CURLOPT_URL, $request_url);
-    curl_setopt( $curl, CURLOPT_HEADER, 1); 
-    curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, $context['http']['method']); 
-    curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false); 
+    curl_setopt( $curl, CURLOPT_HEADER, 1);
+    curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, $context['http']['method']);
+    curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt( $curl, CURLOPT_HTTPHEADER, $context['http']['header']);
     curl_setopt( $curl, CURLOPT_TIMEOUT, 5);
@@ -90,7 +90,7 @@ class SuzuriForWpApi {
 
     $errno = curl_errno($curl);
 	  $error = curl_error($curl);
-	  
+
     curl_close($curl);
 
     if (CURLE_OK !== $errno) {

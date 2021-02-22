@@ -56,6 +56,7 @@ require_once dirname( __FILE__ ) . '/lib/widget.php';
         $limit = get_option(self::PLUGIN_DB_PREFIX . "_limit");
         $product_type = get_option(self::PLUGIN_DB_PREFIX . "_product_type");
         $choice_id = get_option(self::PLUGIN_DB_PREFIX . "_choice_id");
+        $is_cache = get_option(self::PLUGIN_DB_PREFIX . "_is_cache");
     ?>
     <div class="wrap suzuri_for_wp__setting">
         <h1>SUZURI for WP</h1>
@@ -79,7 +80,7 @@ require_once dirname( __FILE__ ) . '/lib/widget.php';
             <select name="limit">
                 <?php for($i=1; $i <= 20; $i++): ?>
                 <option value="<?php echo $i; ?>"<?php if($i == $limit): echo" selected='selected'"; endif; ?>>
-                    <?php echo $i; ?>        
+                    <?php echo $i; ?>
                 </option>
                 <?php endfor; ?>
             </select>
@@ -91,14 +92,19 @@ require_once dirname( __FILE__ ) . '/lib/widget.php';
             <input type="radio" name="product_type" value="choice" id="product_type_2"<?php if($product_type == 'choice'): echo" checked='checked'"; endif; ?>>
                 <label for="product_type_2">オモイデ</label>
         </p>
-        <p>表示したい商品がオモイデの場合オモイデIDを指定してください。</p> 
+        <p>表示したい商品がオモイデの場合オモイデIDを指定してください。</p>
         <p>
             <label for="choice" class="sfw_label">オモイデID：</label>
             <input type="text" name="choice_id" value="<?= $choice_id; ?>"/>
-            
         </p>
 
-        <p><input type='submit' value='保存' class='button button-primary button-large'></p>
+        <p><label for="is-cache" class="sfw_label">表示にキャッシュを使う(推奨)</label>
+            <input type="checkbox" name="is_cache" value="1" id="is-cache"<?php if($is_cache): echo" checked='checked'"; endif; ?>><br>
+            <div class="sfw_description">チェックを入れた後初のウィジェット表示でAPIから取得したデータをWPに保存し、以降表示に使います。<br>商品の入れ替えなどでキャッシュを削除したい際は、一度「キャッシュの削除」からデータを削除し、再度ウィジェットを表示させてデータを取得してください。<br>
+            <input type="submit" class="button button-secondary" name="clear_cache" value="キャッシュの削除"></div>
+        </p>
+
+        <p><input type='submit' value='保存' name="config_save" class='button button-primary button-large'></p>
         </form>
     </div>
     <?php
@@ -110,19 +116,27 @@ require_once dirname( __FILE__ ) . '/lib/widget.php';
         if (isset($_POST[self::CREDENTIAL_NAME]) && $_POST[self::CREDENTIAL_NAME]) {
             if (check_admin_referer(self::CREDENTIAL_ACTION, self::CREDENTIAL_NAME)) {
 
-                $api_key = isset($_POST['api_key']) ? $_POST['api_key'] : get_option(self::PLUGIN_DB_PREFIX . "_api_key");
-                $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : get_option(self::PLUGIN_DB_PREFIX . "_user_name");
-                $limit = isset($_POST['limit']) ? $_POST['limit'] : get_option(self::PLUGIN_DB_PREFIX . "_limit");
-                $product_type = isset($_POST['product_type']) ? $_POST['product_type'] : get_option(self::PLUGIN_DB_PREFIX . "_product_type");
-                $choice_id = isset($_POST['choice_id']) ? $_POST['choice_id'] : get_option(self::PLUGIN_DB_PREFIX . "_choice_id");
+                if($_POST['clear_cache']) {
+                    update_option(self::PLUGIN_DB_PREFIX . "_product_data", '');
+                    $msg = "SUZURI商品データのキャッシュを削除しました";
+                }
+                if($_POST['config_save']) {
+                    $api_key = isset($_POST['api_key']) ? $_POST['api_key'] : get_option(self::PLUGIN_DB_PREFIX . "_api_key");
+                    $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : get_option(self::PLUGIN_DB_PREFIX . "_user_name");
+                    $limit = isset($_POST['limit']) ? $_POST['limit'] : get_option(self::PLUGIN_DB_PREFIX . "_limit");
+                    $product_type = isset($_POST['product_type']) ? $_POST['product_type'] : get_option(self::PLUGIN_DB_PREFIX . "_product_type");
+                    $choice_id = isset($_POST['choice_id']) ? $_POST['choice_id'] : get_option(self::PLUGIN_DB_PREFIX . "_choice_id");
+                    $is_cache = isset($_POST['is_cache']) ? $_POST['is_cache'] : get_option(self::PLUGIN_DB_PREFIX . "_cache_id");
 
-                update_option(self::PLUGIN_DB_PREFIX . "_api_key", $api_key);
-                update_option(self::PLUGIN_DB_PREFIX . "_user_name", $user_name);
-                update_option(self::PLUGIN_DB_PREFIX . "_limit", $limit);
-                update_option(self::PLUGIN_DB_PREFIX . "_product_type", $product_type);
-                update_option(self::PLUGIN_DB_PREFIX . "_choice_id", $choice_id);
+                    update_option(self::PLUGIN_DB_PREFIX . "_api_key", $api_key);
+                    update_option(self::PLUGIN_DB_PREFIX . "_user_name", $user_name);
+                    update_option(self::PLUGIN_DB_PREFIX . "_limit", $limit);
+                    update_option(self::PLUGIN_DB_PREFIX . "_product_type", $product_type);
+                    update_option(self::PLUGIN_DB_PREFIX . "_choice_id", $choice_id);
+                    update_option(self::PLUGIN_DB_PREFIX . "_is_cache", $is_cache);
 
-                $msg = "設定の保存が完了しました。";
+                    $msg = "設定の保存が完了しました。";
+                }
 
                 set_transient(self::COMPLETE_CONFIG, $msg, 5);
                 wp_safe_redirect(menu_page_url(self::CONFIG_MENU_SLUG));
@@ -136,8 +150,14 @@ require_once dirname( __FILE__ ) . '/lib/widget.php';
     <style>
         .suzuri_for_wp__setting .sfw_label {
             display: inline-block;
-            width: 130px;
+            width: 200px;
             font-weight: 600;
+        }
+        .suzuri_for_wp__setting .sfw_description {
+            margin-left: 200px;
+        }
+        .suzuri_for_wp__setting .sfw_description .button{
+            margin-top: 10px;
         }
     </style>
     <?php }

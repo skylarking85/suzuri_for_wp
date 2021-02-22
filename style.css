@@ -1,23 +1,23 @@
-.widget_suzuriforwpwidget ul {
+.widget_suzuriforwpwidget .suzuri_product_list {
 	margin: 0;
 	padding: 0;
 }
-.widget_suzuriforwpwidget li {
+.widget_suzuriforwpwidget .suzuri_product_item {
 	list-style: none;
 }
-.widget_suzuriforwpwidget h4 {
-	font-size: 16px;
-	line-height: 1.25em;
-}
-.widget_suzuriforwpwidget a {
+.widget_suzuriforwpwidget .suzuri_product_item a {
 	color: #333;
 	text-decoration: none;
 }
-.widget_suzuriforwpwidget a:hover {
+.widget_suzuriforwpwidget .suzuri_product_item a:hover {
 	color: #333;
 	background-color: rgba(84,153,175,.05);
 }
-.widget_suzuriforwpwidget img {
+.widget_suzuriforwpwidget .suzuri_product_title {
+	font-size: 16px;
+	line-height: 1.25em;
+}
+.widget_suzuriforwpwidget .suzuri_product_image {
 	width: 200px;
 	height: auto;
 	margin: 0 auto;
