@@ -21,9 +21,9 @@ It is a plugin that can display a list of your products sold at SUZURI.
 == Description ==
 
 1. Upload `/suzuri_for_wp` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the ‘Plugins’ menu in WordPress
-3. Enter the SUZURI API key and user name.
-4. Select the product you want to display from "All Products Latest" and "OMOIDE". If you have a list of OMOIDE you want to display, enter the OMOIDE list ID.
+2. Activate a plugin through the ‘Plugins’ menu in WordPress
+3. Enter your SUZURI API key and user name.
+4. Select your product you want to display from "All Products Latest" and "OMOIDE". If you have a list of OMOIDE you want to display, please enter your OMOIDE list ID.
 
 See details https://skylarking.me/2020/06/suzuri_on_wordpress/
  
